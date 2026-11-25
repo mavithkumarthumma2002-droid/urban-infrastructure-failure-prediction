@@ -3,7 +3,7 @@
 Loads urbandata.csv, prints a short summary and draws a histogram of every
 numeric column so data errors are easy to spot.
 
-    python -m src.data
+    python main.py explore
 """
 from pathlib import Path
 
