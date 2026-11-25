@@ -1,0 +1,46 @@
+Rows: 456, columns: 12
+
+Missing values:
+inspector_id             0
+material_flexibility     0
+structural_mass_ratio    1
+recent_precipitation     2
+infrastructure_age       4
+surface_debris           0
+vibration_exposure       1
+asset_density            0
+inspection_season        0
+inspection_window        0
+moisture_stress          3
+failure                  0
+
+Failure rate: 36.8%
+failure
+0    288
+1    168
+
+inspection_season values:
+inspection_season
+summer    133
+autumn    122
+winter    115
+spring     85
+sumer       1
+
+inspection_window values:
+inspection_window
+night        172
+morning      148
+afternoon    135
+morni7ng       1
+
+Numeric columns:
+                       count   mean    std    min    25%    50%    75%     max
+material_flexibility   456.0  32.59   4.74  24.92  30.50  31.90  34.03   91.16
+structural_mass_ratio  455.0  12.09   0.59  11.51  11.67  11.86  12.33   14.82
+recent_precipitation   454.0   3.11   1.37   0.00   2.14   2.93   4.31    6.09
+infrastructure_age     452.0  68.53  14.49  41.09  58.59  64.79  76.74  125.95
+surface_debris         456.0   9.27   0.79   7.43   8.74   9.13   9.77   11.72
+vibration_exposure     455.0   4.96   0.08   4.74   4.91   4.96   5.01    5.25
+asset_density          456.0   2.65   0.27   2.20   2.45   2.60   2.85    3.36
+moisture_stress        453.0   0.04   0.05   0.00   0.01   0.02   0.04    0.48

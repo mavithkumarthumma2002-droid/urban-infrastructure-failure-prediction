@@ -1,12 +1,15 @@
-"""Loading the urban infrastructure data.
+"""Loading the urban infrastructure data and a first look at it.
 
-Loads urbandata.csv and checks it has every column from the data dictionary.
+Loads urbandata.csv and prints a short summary of it (missing values,
+class balance and the values of the categorical columns).
+
+    python -m src.data
 """
 from pathlib import Path
 
 import pandas as pd
 
-from src.config import RAW_DATA
+from src.config import RAW_DATA, TABLES_DIR
 
 TARGET = "failure"
 NUMERIC_COLS = [
@@ -39,3 +42,35 @@ def load_data(path=RAW_DATA):
         raise ValueError(f"Columns missing from {path.name}: {missing}")
     return df
 
+
+def summarise(df):
+    """Return the basic facts about the data as a block of text."""
+    lines = [
+        f"Rows: {len(df)}, columns: {df.shape[1]}",
+        "",
+        "Missing values:",
+        df.isna().sum().to_string(),
+        "",
+        f"Failure rate: {df[TARGET].mean():.1%}",
+        df[TARGET].value_counts().to_string(),
+        "",
+    ]
+    for col in CATEGORICAL_COLS:
+        lines += [f"{col} values:", df[col].value_counts().to_string(), ""]
+    lines += ["Numeric columns:", df[NUMERIC_COLS].describe().T.round(2).to_string()]
+    return "\n".join(lines)
+
+
+def main():
+    TABLES_DIR.mkdir(parents=True, exist_ok=True)
+    df = load_data()
+
+    summary = summarise(df)
+    print(summary)
+    (TABLES_DIR / "data_summary.txt").write_text(summary, encoding="utf-8")
+
+    print("\nSaved data_summary.txt")
+
+
+if __name__ == "__main__":
+    main()
