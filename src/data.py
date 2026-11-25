@@ -36,7 +36,10 @@ def load_data(path=RAW_DATA):
     if not path.exists():
         raise FileNotFoundError(f"Could not find the data file at {path}")
 
-    df = pd.read_csv(path)
+    try:
+        df = pd.read_csv(path)
+    except pd.errors.EmptyDataError:
+        raise ValueError(f"{path.name} is empty")
     if df.empty:
         raise ValueError(f"{path.name} has no rows")
 

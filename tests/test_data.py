@@ -32,6 +32,14 @@ def test_empty_file_is_rejected(tmp_path):
         load_data(path)
 
 
+def test_blank_file_is_rejected(tmp_path):
+    path = tmp_path / "blank.csv"
+    path.write_text("")
+
+    with pytest.raises(ValueError, match="empty"):
+        load_data(path)
+
+
 def test_summary_mentions_failure_rate():
     text = summarise(load_data())
     assert "Failure rate: 36.8%" in text
