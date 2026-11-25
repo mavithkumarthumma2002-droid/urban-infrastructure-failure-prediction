@@ -1,15 +1,18 @@
 """Loading the urban infrastructure data and a first look at it.
 
-Loads urbandata.csv and prints a short summary of it (missing values,
-class balance and the values of the categorical columns).
+Loads urbandata.csv, prints a short summary and draws a histogram of every
+numeric column so data errors are easy to spot.
 
     python -m src.data
 """
 from pathlib import Path
 
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 import pandas as pd
 
-from src.config import RAW_DATA, TABLES_DIR
+from src.config import FIGURES_DIR, RAW_DATA, TABLES_DIR
 
 TARGET = "failure"
 NUMERIC_COLS = [
@@ -61,7 +64,19 @@ def summarise(df):
     return "\n".join(lines)
 
 
+def plot_histograms(df, out_file):
+    fig, axes = plt.subplots(2, 4, figsize=(16, 7))
+    for ax, col in zip(axes.ravel(), NUMERIC_COLS):
+        ax.hist(df[col].dropna(), bins=30, color="steelblue", edgecolor="white")
+        ax.set_title(col, fontsize=11)
+    fig.suptitle("Raw data - histograms of the numeric columns")
+    fig.tight_layout()
+    fig.savefig(out_file, dpi=150)
+    plt.close(fig)
+
+
 def main():
+    FIGURES_DIR.mkdir(parents=True, exist_ok=True)
     TABLES_DIR.mkdir(parents=True, exist_ok=True)
     df = load_data()
 
@@ -69,7 +84,8 @@ def main():
     print(summary)
     (TABLES_DIR / "data_summary.txt").write_text(summary, encoding="utf-8")
 
-    print("\nSaved data_summary.txt")
+    plot_histograms(df, FIGURES_DIR / "raw_histograms.png")
+    print("\nSaved data_summary.txt and raw_histograms.png")
 
 
 if __name__ == "__main__":
