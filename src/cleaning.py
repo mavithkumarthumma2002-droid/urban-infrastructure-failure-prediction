@@ -10,9 +10,12 @@ inside the model pipeline, so nothing from the validation/test data leaks in.
 
     python main.py clean
 """
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 import numpy as np
 
-from src.config import PROCESSED_DIR, TABLES_DIR
+from src.config import FIGURES_DIR, PROCESSED_DIR, TABLES_DIR
 from src.data import ID_COLS, load_data
 
 CLEAN_FILE = PROCESSED_DIR / "cleaned_data.csv"
@@ -60,13 +63,30 @@ def clean_data(df):
     return df, n_bad
 
 
+def plot_before_after(raw, clean, out_file, col="material_flexibility"):
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 4))
+    ax1.hist(raw[col].dropna(), bins=30, color="steelblue", edgecolor="white")
+    ax1.set_title("Before cleaning")
+    ax1.annotate("91.16 x2", xy=(91, 2), xytext=(65, 60),
+                 arrowprops=dict(arrowstyle="->", color="red"), color="red")
+    ax2.hist(clean[col].dropna(), bins=30, color="steelblue", edgecolor="white")
+    ax2.set_title("After cleaning")
+    for ax in (ax1, ax2):
+        ax.set_xlabel(col)
+    ax1.set_ylabel("Number of blocks")
+    fig.tight_layout()
+    fig.savefig(out_file, dpi=150)
+    plt.close(fig)
+
+
 def main():
-    for folder in (PROCESSED_DIR, TABLES_DIR):
+    for folder in (PROCESSED_DIR, FIGURES_DIR, TABLES_DIR):
         folder.mkdir(parents=True, exist_ok=True)
     raw = load_data()
     clean, n_bad = clean_data(raw)
 
     clean.to_csv(CLEAN_FILE, index=False)
+    plot_before_after(raw, clean, FIGURES_DIR / "material_flexibility_before_after.png")
 
     log = [
         "Cleaning log",
