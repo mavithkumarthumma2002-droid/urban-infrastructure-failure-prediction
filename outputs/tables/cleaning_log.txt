@@ -1,0 +1,6 @@
+Cleaning log
+Fixed typos: 'sumer' -> 'summer', 'morni7ng' -> 'morning'
+material_flexibility: 2 values above 50 set to missing
+Dropped inspector_id
+Missing cells left (filled later in the pipeline): 13
+Median material_flexibility after cleaning: 31.9

@@ -8,10 +8,11 @@ everything once first.
 """
 import sys
 
-from src import data
+from src import cleaning, data
 
 STEPS = {
     "explore": data.main,
+    "clean": cleaning.main,
 }
 
 
