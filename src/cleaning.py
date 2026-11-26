@@ -14,9 +14,10 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
 from src.config import FIGURES_DIR, PROCESSED_DIR, TABLES_DIR
-from src.data import ID_COLS, load_data
+from src.data import ID_COLS, NUMERIC_COLS, TARGET, load_data
 
 CLEAN_FILE = PROCESSED_DIR / "cleaned_data.csv"
 
@@ -63,6 +64,18 @@ def clean_data(df):
     return df, n_bad
 
 
+def variables_table():
+    rows = [[col, "Numeric (continuous)", "Used"] for col in NUMERIC_COLS if col != "moisture_stress"]
+    rows += [
+        ["moisture_stress", "Numeric (discrete, steps of 0.01)", "Used"],
+        ["inspection_season", "Categorical (one-hot encoded)", "Used"],
+        ["inspection_window", "Categorical (one-hot encoded)", "Used"],
+        ["inspector_id", "Categorical (ID)", "Not used - an ID, not a property of the block"],
+        [TARGET, "Categorical (binary target)", "Target"],
+    ]
+    return pd.DataFrame(rows, columns=["Variable", "Treated as", "Used in model"])
+
+
 def plot_before_after(raw, clean, out_file, col="material_flexibility"):
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 4))
     ax1.hist(raw[col].dropna(), bins=30, color="steelblue", edgecolor="white")
@@ -86,6 +99,7 @@ def main():
     clean, n_bad = clean_data(raw)
 
     clean.to_csv(CLEAN_FILE, index=False)
+    variables_table().to_csv(TABLES_DIR / "variables_table.csv", index=False)
     plot_before_after(raw, clean, FIGURES_DIR / "material_flexibility_before_after.png")
 
     log = [

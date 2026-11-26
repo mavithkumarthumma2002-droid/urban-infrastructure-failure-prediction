@@ -1,0 +1,13 @@
+Variable,Treated as,Used in model
+material_flexibility,Numeric (continuous),Used
+structural_mass_ratio,Numeric (continuous),Used
+recent_precipitation,Numeric (continuous),Used
+infrastructure_age,Numeric (continuous),Used
+surface_debris,Numeric (continuous),Used
+vibration_exposure,Numeric (continuous),Used
+asset_density,Numeric (continuous),Used
+moisture_stress,"Numeric (discrete, steps of 0.01)",Used
+inspection_season,Categorical (one-hot encoded),Used
+inspection_window,Categorical (one-hot encoded),Used
+inspector_id,Categorical (ID),"Not used - an ID, not a property of the block"
+failure,Categorical (binary target),Target
